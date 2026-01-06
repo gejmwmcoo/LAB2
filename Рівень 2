@@ -1,0 +1,137 @@
+Book.h
+
+#ifndef LAB2_BOOK_H_
+#define LAB2_BOOK_H_
+
+#include <string>
+
+class Book {
+ public:
+  // (1) Конструктори (перевантаження)
+  Book();
+  Book(int id, const std::string& title, double price);
+
+  // (2) Перевантажені методи
+  void SetPrice(double price);
+  void SetPrice(double price, double discount);
+
+  // (3) Інші методи
+  void Print() const;
+  bool IsExpensive(double limit) const;
+
+  // (4) Робота з файлом
+  void WriteToFile(const std::string& filename) const;
+  void ReadFromFile(const std::string& filename);
+
+  // public поля (за вимогою)
+  bool is_available_;
+  double rating_;
+  int id_;
+
+ private:
+  std::string title_;
+  std::string author_;
+  int year_;
+  int pages_;
+  double price_;
+};
+
+#endif  // LAB2_BOOK_H_
+
+
+
+
+Book.cpp
+
+#include "Book.h"
+#include <fstream>
+#include <iostream>
+
+Book::Book()
+    : year_(0),
+      pages_(0),
+      price_(0.0),
+      is_available_(true),
+      rating_(0.0),
+      id_(0) {}
+
+Book::Book(int id, const std::string& title, double price)
+    : title_(title),
+      price_(price),
+      is_available_(true),
+      rating_(0.0),
+      id_(id) {}
+
+void Book::SetPrice(double price) {
+  price_ = price;
+}
+
+void Book::SetPrice(double price, double discount) {
+  price_ = price - discount;
+}
+
+bool Book::IsExpensive(double limit) const {
+  return price_ > limit;
+}
+
+void Book::Print() const {
+  std::cout << "ID: " << id_
+            << ", Назва: " << title_
+            << ", Ціна: " << price_
+            << ", Доступна: " << is_available_
+            << std::endl;
+}
+
+void Book::WriteToFile(const std::string& filename) const {
+  std::ofstream file(filename, std::ios::app);
+  file << id_ << " " << title_ << " " << price_ << std::endl;
+}
+
+void Book::ReadFromFile(const std::string& filename) {
+  std::ifstream file(filename);
+  file >> id_ >> title_ >> price_;
+}
+
+
+main.cpp
+
+#include "Book.h"
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+int main() {
+  // (5) 5 статичних обʼєктів
+  Book books_static[5];
+
+  // (6) 5 динамічних обʼєктів
+  Book* books_dynamic[5];
+  for (int i = 0; i < 5; ++i) {
+    books_dynamic[i] = new Book(i, "Book", 100 + i * 10);
+  }
+
+  // (7) Масив обʼєктів
+  for (int i = 0; i < 5; ++i) {
+    books_dynamic[i]->Print();
+  }
+
+  // (8) Покажчик на обʼєкт
+  Book* ptr = books_dynamic[0];
+  ptr->SetPrice(200, 20);
+  ptr->Print();
+
+  // (9) Динамічна памʼять + сортування
+  int size = 5;
+  int* prices = new int[size]{120, 90, 150, 80, 110};
+  std::sort(prices, prices + size);
+
+  delete[] prices;
+
+  // очищення памʼяті
+  for (int i = 0; i < 5; ++i) {
+    delete books_dynamic[i];
+  }
+
+  return 0;
+}
+
