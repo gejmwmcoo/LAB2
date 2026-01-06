@@ -1,0 +1,88 @@
+Book.h
+
+#ifndef BOOK_H_
+#define BOOK_H_
+
+#include
+
+class Book {
+public:
+// Конструктор за замовчуванням
+Book();
+
+// Методи для запису даних
+void SetTitle(const std::string& title);
+void SetAuthor(const std::string& author);
+void SetYear(int year);
+void SetPages(int pages);
+void SetAvailability(bool available);
+
+// Методи для перегляду даних
+void Print() const;
+
+private:
+std::string title_;
+std::string author_;
+int year_;
+int pages_;
+bool is_available_;
+};
+
+#endif // BOOK_H_
+
+Book.cpp
+
+#include "Book.h"
+#include
+
+// Конструктор
+Book::Book()
+: year_(0), pages_(0), is_available_(true) {}
+
+void Book::SetTitle(const std::string& title) {
+title_ = title;
+}
+
+void Book::SetAuthor(const std::string& author) {
+author_ = author;
+}
+
+void Book::SetYear(int year) {
+year_ = year;
+}
+
+void Book::SetPages(int pages) {
+pages_ = pages;
+}
+
+void Book::SetAvailability(bool available) {
+is_available_ = available;
+}
+
+void Book::Print() const {
+std::cout << "Назва: " << title_ << std::endl;
+std::cout << "Автор: " << author_ << std::endl;
+std::cout << "Рік: " << year_ << std::endl;
+std::cout << "Сторінки: " << pages_ << std::endl;
+std::cout << "Доступна: "
+<< (is_available_ ? "Так" : "Ні") << std::endl;
+}
+
+main.cpp
+
+#include "Book.h"
+#include
+
+int main() {
+Book book;
+
+book.SetTitle("C++ Programming");
+book.SetAuthor("Bjarne Stroustrup");
+book.SetYear(2013);
+book.SetPages(1376);
+book.SetAvailability(true);
+
+book.Print();
+
+return 0;
+}
